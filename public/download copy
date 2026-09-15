@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Management - Energy Optimization for SME Garment Factory</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#022c22'
+            },
+            slate: {
+              850: '#0f172a',
+              900: '#090d16'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #f8faff;
+    }
+    .mono-num {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- TOP APP HEADER -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-4">
+        <div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center p-1.5 shadow-sm">
+          <img src="https://lh3.googleusercontent.com/aida/AEtjO1VVW-ffahGR-hIR5uHx8bGCDDWVhtlsvmvGMtOc8G1e9onYpaJ52IeUOp-zi251agdO2jwSP9lDdDzQ8dCm-BYzwy9VH6vI7mJGUc8b2VF8IC7ASwuiwK8IefR9KWHrZlYm9c_HsQ_uTyldnJ-1ovVHp9aLrAb2_D4qImUfXd2y772udwquc60Oe--R-sytZ1RoCuQnTMSLTz62MK5p9zhedj5asNOD0JpvKnBmkmHb9m73WlWiUAC7Ds7N" alt="Apex Energy Telemetry" class="w-full h-full object-contain">
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-bold text-slate-900 tracking-tight">Apex Energy Telemetry</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-mono font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200 rounded">SRI LANKA SME ENGINE</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">Energy Optimization for SME Garment Factory</p>
+        </div>
+      </div>
+
+      <!-- App Navigation -->
+      <nav class="hidden md:flex items-center space-x-1 border border-slate-200 rounded-lg p-1 bg-slate-50/70 text-xs font-medium">
+        <a href="#" class="px-3 py-1.5 text-slate-500 hover:text-slate-800 rounded transition-colors">Dashboard</a>
+        <a href="#" class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded transition-colors flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Factory Setup
+        </a>
+        <a href="#" class="px-3 py-1.5 bg-white text-slate-900 font-semibold shadow-xs border border-slate-200/80 rounded">
+          Machines
+        </a>
+        <a href="#" class="px-3 py-1.5 text-slate-400 cursor-not-allowed rounded">Optimization</a>
+        <a href="#" class="px-3 py-1.5 text-slate-400 cursor-not-allowed rounded">Reports</a>
+      </nav>
+
+      <!-- Tariff Compliance Badge & Profile -->
+      <div class="flex items-center space-x-4">
+        <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 bg-slate-100/80 rounded-full border border-slate-200 text-xs text-slate-600 font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>CEB Industrial Tariff Standard (I-2 / I-3 Compatible)</span>
+        </div>
+        <div class="flex items-center space-x-3 pl-2 border-l border-slate-200">
+          <div class="text-right">
+            <p class="text-xs font-bold text-slate-900">Kavinda Wickramasinghe</p>
+            <p class="text-[11px] text-slate-500">Plant Manager &bull; ABC Garments</p>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-slate-900 text-white font-mono text-xs font-bold flex items-center justify-center border border-slate-700 shadow-sm">
+            KW
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SETUP PROGRESS STEPPER -->
+  <section class="bg-white border-b border-slate-200 py-3.5 shadow-xs">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-mono font-bold tracking-wider rounded border border-emerald-200 mb-1 uppercase">
+          Step 2 of 4: Machine Inventory Configuration
+        </div>
+        <h1 class="text-xl font-bold text-slate-900 tracking-tight">Machine Management</h1>
+        <p class="text-xs text-slate-500">Add the machines used in your factory so the system can calculate energy consumption and generate optimized operating schedules.</p>
+      </div>
+
+      <!-- Stepper Flow -->
+      <div class="flex items-center gap-2 text-xs font-medium">
+        <!-- Step 1 Done -->
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800">
+            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span class="font-semibold">01 Factory Setup</span>
+            <span class="text-[9px] font-mono px-1 rounded bg-emerald-200/60 uppercase">Done</span>
+          </div>
+          <div class="w-5 h-px bg-emerald-300"></div>
+        </div>
+
+        <!-- Step 2 Active -->
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-slate-900 text-white shadow-sm ring-2 ring-emerald-500/30">
+            <span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-bold font-mono text-[11px] flex items-center justify-center">02</span>
+            <span class="font-bold">Add Machines</span>
+            <span class="text-[9px] font-mono uppercase bg-emerald-500/20 text-emerald-300 px-1 rounded">Current</span>
+          </div>
+          <div class="w-5 h-px bg-slate-200"></div>
+        </div>
+
+        <!-- Step 3 Upcoming -->
+        <div class="flex items-center gap-2 opacity-50">
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+            <span class="font-mono text-xs">03</span>
+            <span>Optimization</span>
+          </div>
+          <div class="w-5 h-px bg-slate-200"></div>
+        </div>
+
+        <!-- Step 4 Upcoming -->
+        <div class="flex items-center gap-1.5 opacity-50 px-2.5 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+          <span class="font-mono text-xs">04</span>
+          <span>Dashboard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN BODY CONTENT -->
+  <main class="max-w-7xl mx-auto px-6 py-6 w-full flex-grow space-y-6">
+
+    <!-- KPI SUMMARY METRIC CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span>Total Machines</span>
+            <span class="text-slate-400" title="Total operational machine units in inventory">ℹ️</span>
+          </div>
+          <div class="text-2xl font-bold text-slate-900 mono-num mt-1">14 <span class="text-xs font-normal text-slate-500">Units</span></div>
+          <p class="text-[11px] text-slate-500 mt-0.5">Across 3 manufacturing categories</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 font-bold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span>Total Installed Power</span>
+            <span class="text-slate-400 cursor-help" title="kW (Kilowatts) measures simultaneous electric demand rate">ℹ️</span>
+          </div>
+          <div class="text-2xl font-bold text-slate-900 mono-num mt-1">19.0 <span class="text-xs font-normal text-slate-500">kW</span></div>
+          <p class="text-[11px] text-emerald-600 font-medium mt-0.5">Maximum concurrent capacity</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span>Estimated Daily Energy</span>
+            <span class="text-slate-400 cursor-help" title="kWh (Kilowatt-hours) represents electrical consumption (1 Unit = 1 kWh) and dictates tariff billing">ℹ️</span>
+          </div>
+          <div class="text-2xl font-bold text-slate-900 mono-num mt-1">94.0 <span class="text-xs font-normal text-slate-500">kWh / day</span></div>
+          <p class="text-[11px] text-slate-500 mt-0.5">94 CEB billing units / day baseline</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-1 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+            <span>Machines Configured</span>
+            <span class="text-slate-400" title="Valid entries ready for schedule optimization">ℹ️</span>
+          </div>
+          <div class="text-2xl font-bold text-emerald-700 mono-num mt-1">3 / 3 <span class="text-xs font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">Ready</span></div>
+          <p class="text-[11px] text-slate-500 mt-0.5">All operating windows validated</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN MACHINE TABLE CONTAINER -->
+    <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <!-- Table Header Bar with Actions -->
+      <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/40">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            Factory Machine Inventory
+            <span class="text-xs font-mono font-medium px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">3 Configured Machine Types</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Individual power ratings and operating flexibility parameters feeding into the MILP optimization model.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="document.getElementById('addMachineModal').classList.remove('hidden')" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-emerald-500/50">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+            </svg>
+            + Add Machine
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-700">
+          <thead class="bg-slate-50/80 text-slate-600 uppercase font-mono text-[11px] tracking-wider border-b border-slate-200">
+            <tr>
+              <th scope="col" class="py-3 px-4 font-semibold">Machine Name</th>
+              <th scope="col" class="py-3 px-3 font-semibold">Category</th>
+              <th scope="col" class="py-3 px-3 font-semibold text-center">Quantity</th>
+              <th scope="col" class="py-3 px-3 font-semibold text-right">Power / Unit <span class="text-[10px] text-slate-400 font-normal">(kW)</span></th>
+              <th scope="col" class="py-3 px-3 font-semibold text-right">Total Power <span class="text-[10px] text-slate-400 font-normal">(kW)</span></th>
+              <th scope="col" class="py-3 px-4 font-semibold">Required Runtime</th>
+              <th scope="col" class="py-3 px-4 font-semibold">Available Window</th>
+              <th scope="col" class="py-3 px-3 font-semibold text-center">Status</th>
+              <th scope="col" class="py-3 px-4 font-semibold text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <!-- Row 1: Fabric Cutter -->
+            <tr class="hover:bg-slate-50/70 transition-colors">
+              <td class="py-3.5 px-4 font-medium text-slate-900">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-xs border border-blue-100">
+                    FC
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-900">Fabric Cutter</div>
+                    <div class="text-[11px] text-slate-400 font-mono">ID: MCH-CUT-01 &bull; Priority: High</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                  Cutting
+                </span>
+              </td>
+              <td class="py-3.5 px-3 text-center mono-num font-semibold text-slate-900">
+                2
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-medium text-slate-800">
+                4.0 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-bold text-slate-900">
+                8.0 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-1.5">
+                  <span class="mono-num font-semibold text-slate-900">3.0 hrs / day</span>
+                </div>
+                <div class="text-[11px] text-slate-500 mono-num">Est: 24.0 kWh/day</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-200 font-mono text-[11px] text-slate-700">
+                  <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 3"/>
+                  </svg>
+                  07:00 AM – 06:00 PM
+                </div>
+                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">11h window (Slack: 8h)</div>
+              </td>
+              <td class="py-3.5 px-3 text-center">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ready
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <div class="flex items-center justify-center space-x-1.5">
+                  <button title="View Details" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded transition-colors" onclick="alert('Machine: Fabric Cutter\nCategory: Cutting\nTotal Power: 8.0 kW\nSlack flexibility: 8 hours\nStatus: Ready for MILP load shifting')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                  <button title="Edit Machine" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" onclick="document.getElementById('addMachineModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+                  <button title="Delete Machine" class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors" onclick="document.getElementById('deleteConfirmModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 2: Sewing Machine -->
+            <tr class="hover:bg-slate-50/70 transition-colors">
+              <td class="py-3.5 px-4 font-medium text-slate-900">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-100">
+                    SM
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-900">Sewing Machine Line (Juki / Brother)</div>
+                    <div class="text-[11px] text-slate-400 font-mono">ID: MCH-SEW-01 &bull; Priority: High</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                  Sewing
+                </span>
+              </td>
+              <td class="py-3.5 px-3 text-center mono-num font-semibold text-slate-900">
+                10
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-medium text-slate-800">
+                0.5 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-bold text-slate-900">
+                5.0 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-1.5">
+                  <span class="mono-num font-semibold text-slate-900">8.0 hrs / day</span>
+                </div>
+                <div class="text-[11px] text-slate-500 mono-num">Est: 40.0 kWh/day</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-200 font-mono text-[11px] text-slate-700">
+                  <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 3"/>
+                  </svg>
+                  07:00 AM – 05:00 PM
+                </div>
+                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">10h window (Slack: 2h)</div>
+              </td>
+              <td class="py-3.5 px-3 text-center">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ready
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <div class="flex items-center justify-center space-x-1.5">
+                  <button title="View Details" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded transition-colors" onclick="alert('Machine: Sewing Machine Line\nCategory: Sewing\nTotal Power: 5.0 kW (10 units x 0.5 kW)\nOperating Slack: 2 hours\nStatus: Ready')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                  <button title="Edit Machine" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" onclick="document.getElementById('addMachineModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+                  <button title="Delete Machine" class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors" onclick="document.getElementById('deleteConfirmModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 3: Steam Ironing Station -->
+            <tr class="hover:bg-slate-50/70 transition-colors">
+              <td class="py-3.5 px-4 font-medium text-slate-900">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-xs border border-amber-100">
+                    SI
+                  </div>
+                  <div>
+                    <div class="font-bold text-slate-900">Steam Ironing Station</div>
+                    <div class="text-[11px] text-slate-400 font-mono">ID: MCH-FIN-01 &bull; Priority: Medium</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                  Finishing
+                </span>
+              </td>
+              <td class="py-3.5 px-3 text-center mono-num font-semibold text-slate-900">
+                2
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-medium text-slate-800">
+                3.0 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-3 text-right mono-num font-bold text-slate-900">
+                6.0 <span class="text-[10px] text-slate-400">kW</span>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-1.5">
+                  <span class="mono-num font-semibold text-slate-900">5.0 hrs / day</span>
+                </div>
+                <div class="text-[11px] text-slate-500 mono-num">Est: 30.0 kWh/day</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-50 border border-slate-200 font-mono text-[11px] text-slate-700">
+                  <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 3"/>
+                  </svg>
+                  07:00 AM – 08:30 PM
+                </div>
+                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">13.5h window (Slack: 8.5h)</div>
+              </td>
+              <td class="py-3.5 px-3 text-center">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Ready
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <div class="flex items-center justify-center space-x-1.5">
+                  <button title="View Details" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded transition-colors" onclick="alert('Machine: Steam Ironing Station\nCategory: Finishing\nTotal Power: 6.0 kW\nOperating Slack: 8.5 hours (Optimal candidate for peak avoidance)\nStatus: Ready')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                  <button title="Edit Machine" class="p-1.5 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded transition-colors" onclick="document.getElementById('addMachineModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+                  <button title="Delete Machine" class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors" onclick="document.getElementById('deleteConfirmModal').classList.remove('hidden')">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table Sub-Bar / Energy Education Callout -->
+      <div class="px-5 py-3 bg-slate-50/60 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-500 gap-2">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">✓</span>
+          <span><strong>Automatic Energy Calculation:</strong> Total Power (kW) = Quantity × Power per Unit. System automatically computes estimated daily kWh.</span>
+        </div>
+        <div class="font-mono text-[11px] text-slate-600 bg-white px-2.5 py-1 rounded border border-slate-200">
+          Note: 1 Unit of electricity = 1 kWh
+        </div>
+      </div>
+    </div>
+
+    <!-- HELPER / OPTIMIZATION ADVISORY CARD -->
+    <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-50/70 via-teal-50/40 to-blue-50/60 border border-emerald-200/80 flex items-start gap-3.5">
+      <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <div class="text-xs text-slate-700 space-y-1">
+        <div class="font-bold text-slate-900 flex items-center gap-2">
+          Load Shifting Readiness Status
+          <span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-800 rounded font-mono text-[10px]">Optimal Flexibility</span>
+        </div>
+        <p>
+          Your current machine inventory provides <strong>18.5 hours of aggregate operating slack</strong> between required runtime and available windows. The optimization engine will leverage this slack to move high-power loads (e.g. Steam Ironing and Cutting) away from the <strong>18:30 – 22:30 Peak Tariff Window (Rs. 45.00/kWh)</strong> into low-cost Day and Off-Peak intervals without reducing factory garment throughput.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM STICKY NAVIGATION CONTROLS -->
+  <footer class="bg-white border-t border-slate-200 py-4 shadow-lg sticky bottom-0 z-30">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3 text-xs text-slate-500">
+        <span class="inline-flex items-center gap-1.5 font-medium text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 3 Machines Ready for Mathematical Modeling
+        </span>
+        <span class="text-slate-300">|</span>
+        <span class="font-mono">Daily Total: 19.0 kW &bull; 94 kWh/day</span>
+      </div>
+
+      <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+        <button type="button" onclick="alert('Navigating back to Step 1: Factory Setup')" class="px-4 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Factory Setup
+        </button>
+
+        <button type="button" onclick="alert('Proceeding to Step 3: Energy Optimization Simulation & Schedule Generation')" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all flex items-center gap-2 focus:ring-2 focus:ring-emerald-500/50">
+          Continue to Optimization
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: ADD MACHINE FORM -->
+  <div id="addMachineModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto flex flex-col">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 sticky top-0 bg-white z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Add Machine</h3>
+            <p class="text-xs text-slate-500">Provide machine power specs and operating parameters for optimization scheduling.</p>
+          </div>
+        </div>
+        <button type="button" onclick="document.getElementById('addMachineModal').classList.add('hidden')" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Form Content -->
+      <form id="machineForm" class="p-6 space-y-5 text-xs">
+        <!-- Row 1: Name & Category -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5">Machine Name <span class="text-rose-500">*</span></label>
+            <input type="text" id="mName" value="Fabric Cutter" placeholder="e.g. Fabric Cutter" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-medium">
+            <p class="text-[10px] text-slate-400 mt-1">Identifies the production equipment on shopfloor</p>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5">Machine Category <span class="text-rose-500">*</span></label>
+            <select id="mCategory" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white font-medium">
+              <option value="Cutting" selected>Cutting</option>
+              <option value="Sewing">Sewing</option>
+              <option value="Ironing">Ironing</option>
+              <option value="Finishing">Finishing</option>
+              <option value="Washing">Washing</option>
+              <option value="Packaging">Packaging</option>
+              <option value="Other">Other</option>
+            </select>
+            <p class="text-[10px] text-slate-400 mt-1">Used to group machine types and production stages</p>
+          </div>
+        </div>
+
+        <!-- Row 2: Quantity & Power Per Unit -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5">Quantity <span class="text-rose-500">*</span></label>
+            <div class="relative">
+              <input type="number" id="mQty" min="1" value="2" oninput="calculateEnergy()" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+              <span class="absolute right-3 top-2 text-slate-400 text-[11px]">Units</span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Must be greater than 0</p>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5 flex items-center justify-between">
+              <span>Power per Unit (kW) <span class="text-rose-500">*</span></span>
+              <span class="text-[10px] text-emerald-600 font-normal cursor-help" title="Active electric power rating in Kilowatts">What is kW?</span>
+            </label>
+            <div class="relative">
+              <input type="number" id="mPower" step="0.1" min="0.1" value="4.0" oninput="calculateEnergy()" placeholder="e.g. 4.0" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+              <span class="absolute right-3 top-2 text-slate-400 text-[11px]">kW</span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Equipment nameplate or measured power draw</p>
+          </div>
+        </div>
+
+        <!-- Row 3: Operating Runtime -->
+        <div>
+          <label class="block font-semibold text-slate-800 mb-1.5">Required Operating Hours per Day <span class="text-rose-500">*</span></label>
+          <div class="relative">
+            <input type="number" id="mHours" step="0.5" min="0.5" max="24" value="3" oninput="calculateEnergy(); checkWindowValidity();" placeholder="e.g. 3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+            <span class="absolute right-3 top-2 text-slate-400 text-[11px]">Hours / day</span>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Total runtime needed to fulfill daily garment sewing quota</p>
+        </div>
+
+        <!-- Row 4: Available Operating Window Time Pickers -->
+        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-width="2" d="M12 7v5l3 3"/>
+              </svg>
+              Available Operating Window
+            </label>
+            <span id="windowDurationBadge" class="text-[11px] font-mono font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">
+              Window: 11.0 Hours
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <span class="text-[11px] text-slate-600 font-medium block mb-1">Earliest Start Time <span class="text-rose-500">*</span></span>
+              <input type="time" id="mStartTime" value="07:00" onchange="checkWindowValidity()" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono bg-white focus:ring-2 focus:ring-emerald-500">
+            </div>
+
+            <div>
+              <span class="text-[11px] text-slate-600 font-medium block mb-1">Latest End Time <span class="text-rose-500">*</span></span>
+              <input type="time" id="mEndTime" value="18:00" onchange="checkWindowValidity()" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono bg-white focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+
+          <!-- Dynamic Validation Alert if Window < Runtime -->
+          <div id="windowErrorAlert" class="hidden p-2.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center gap-2">
+            <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="font-medium">Required runtime cannot fit within the selected operating window.</span>
+          </div>
+        </div>
+
+        <!-- Row 5: Production Output & Priority -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5">Production / Output Requirement <span class="text-slate-400 font-normal">(Optional)</span></label>
+            <input type="text" placeholder="e.g. 1,200 pieces / day" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500">
+            <p class="text-[10px] text-slate-400 mt-1">Optional reference quota for garment production</p>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-800 mb-1.5">Priority <span class="text-rose-500">*</span></label>
+            <select class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 bg-white font-medium">
+              <option value="High" selected>High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <p class="text-[10px] text-slate-400 mt-1">Priority is used by the optimizer when multiple schedules are feasible</p>
+          </div>
+        </div>
+
+        <!-- AUTOMATIC ENERGY CALCULATION CALLOUT -->
+        <div class="p-4 rounded-xl bg-slate-900 text-white space-y-2">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-xs uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              Automatic Energy Calculation
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono">Formula: Total Power × Required Runtime</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 pt-1">
+            <div>
+              <div class="text-[11px] text-slate-400">Total Power (kW):</div>
+              <div id="calcTotalPower" class="text-lg font-bold font-mono text-white">8.0 kW</div>
+              <div class="text-[10px] text-slate-400">Quantity × Power/unit (2 × 4.0 kW)</div>
+            </div>
+
+            <div>
+              <div class="text-[11px] text-slate-400">Estimated Daily Energy:</div>
+              <div id="calcDailyEnergy" class="text-lg font-bold font-mono text-emerald-400">24.0 kWh</div>
+              <div class="text-[10px] text-slate-400">8.0 kW × 3.0 hrs = 24 kWh/day</div>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-800/80 text-[11px] text-slate-300 flex items-center justify-between">
+            <span>Billing equivalence:</span>
+            <span class="font-mono text-emerald-300 font-semibold">1 unit of electricity = 1 kWh</span>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="document.getElementById('addMachineModal').classList.add('hidden')" class="px-4 py-2 border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold rounded-lg transition-colors">
+            Cancel
+          </button>
+          <button type="button" onclick="saveNewMachine()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-sm transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Save Machine
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DELETE CONFIRMATION DIALOG -->
+  <div id="deleteConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+
+      <div class="space-y-1">
+        <h4 class="text-base font-bold text-slate-900">Delete Machine Confirmation</h4>
+        <p class="text-xs text-slate-500">
+          Are you sure you want to remove this machine? This will exclude its power rating (8.0 kW) and runtime from the electricity cost optimization model.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-center gap-3 pt-2">
+        <button type="button" onclick="document.getElementById('deleteConfirmModal').classList.add('hidden')" class="px-4 py-2 border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg transition-colors">
+          No, Keep Machine
+        </button>
+        <button type="button" onclick="document.getElementById('deleteConfirmModal').classList.add('hidden'); alert('Machine successfully removed.');" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all">
+          Yes, Delete Machine
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE LOGIC SCRIPTS -->
+  <script>
+    function calculateEnergy() {
+      const qty = parseFloat(document.getElementById('mQty').value) || 0;
+      const power = parseFloat(document.getElementById('mPower').value) || 0;
+      const hours = parseFloat(document.getElementById('mHours').value) || 0;
+
+      const totalPower = (qty * power).toFixed(1);
+      const dailyEnergy = (qty * power * hours).toFixed(1);
+
+      document.getElementById('calcTotalPower').innerText = totalPower + " kW";
+      document.getElementById('calcDailyEnergy').innerText = dailyEnergy + " kWh";
+    }
+
+    function checkWindowValidity() {
+      const start = document.getElementById('mStartTime').value;
+      const end = document.getElementById('mEndTime').value;
+      const requiredHours = parseFloat(document.getElementById('mHours').value) || 0;
+
+      if (!start || !end) return;
+
+      const [startH, startM] = start.split(':').map(Number);
+      const [endH, endM] = end.split(':').map(Number);
+
+      const startTotal = startH + startM / 60;
+      const endTotal = endH + endM / 60;
+      const duration = endTotal - startTotal;
+
+      const badge = document.getElementById('windowDurationBadge');
+      const alertBox = document.getElementById('windowErrorAlert');
+
+      if (duration <= 0) {
+        badge.innerText = 'Invalid Time Window';
+        badge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 bg-rose-100 text-rose-800 rounded';
+        alertBox.classList.remove('hidden');
+        alertBox.querySelector('span').innerText = 'Earliest start time must be before latest end time.';
+      } else {
+        badge.innerText = 'Window: ' + duration.toFixed(1) + ' Hours';
+        badge.className = 'text-[11px] font-mono font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded';
+
+        if (requiredHours > duration) {
+          alertBox.classList.remove('hidden');
+          alertBox.querySelector('span').innerText = 'Required runtime cannot fit within the selected operating window.';
+        } else {
+          alertBox.classList.add('hidden');
+        }
+      }
+    }
+
+    function saveNewMachine() {
+      const alertBox = document.getElementById('windowErrorAlert');
+      if (!alertBox.classList.contains('hidden')) {
+        alert('Please fix the validation error: ' + alertBox.querySelector('span').innerText);
+        return;
+      }
+      document.getElementById('addMachineModal').classList.add('hidden');
+      alert('Machine information successfully saved and added to optimization registry.');
+    }
+  </script>
+</body>
+</html>
